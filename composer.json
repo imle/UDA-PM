@@ -1,0 +1,21 @@
+{
+	"name": "stevenimle/pm",
+	"description": "Project management app",
+	"minimum-stability": "dev",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Steven Imle",
+			"email": "simle@uda1.com"
+		}
+	],
+	"require": {
+		"aura/sql": "2.4.3",
+		"jeroendesloovere/vcard": "1.2.2",
+		"league/flysystem": "1.0.16",
+		"league/flysystem-sftp": "1.0.8",
+		"altorouter/altorouter": "v1.1.0",
+		"smottt/wideimage": "1.1.1",
+		"phpmailer/phpmailer": "5.4.x-dev"
+	}
+}

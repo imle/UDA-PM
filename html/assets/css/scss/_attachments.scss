@@ -1,0 +1,160 @@
+.attachment_thread {
+	margin-right: 20px;
+	margin-left: 20px;
+
+	.attachment {
+		border-bottom: 1px solid #aeaeae;
+		padding: 10px 8px;
+		position: relative;
+
+		&:last-child {
+			border-bottom-width: 0;
+		}
+
+		.body {
+			margin-left: 40px;
+			margin-right: 40px;
+
+			.name {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.size,
+			.type {
+				min-width: 22%;
+			}
+
+			.size,
+			.type,
+			.uploader {
+				color: #858585;
+				font-weight: 300;
+				line-height: 20px;
+				display: inline-block;
+			}
+
+			.type {
+				span {
+					text-transform: uppercase;
+				}
+			}
+		}
+
+		.download {
+			position: absolute;
+			top: 12px;
+			right: 0;
+			bottom: 10px;
+			width: 40px;
+			text-align: center;
+			line-height: 40px;
+			font-size: 20px;
+			cursor: pointer;
+
+			&:hover {
+				color: #337ab7;
+			}
+
+			&:active {
+				color: #16576a;
+			}
+		}
+
+		.icon {
+			float: left;
+			font-size: 31px;
+			line-height: 40px;
+
+			&:before {
+				content: "\f016";;
+			}
+
+			&[data-type="pdf"]:before {
+				content: "\f1c1";
+			}
+
+			&[data-type="txt"]:before {
+				content: "\f0f6";
+			}
+
+			&[data-type="docx"]:before,
+			&[data-type="docm"]:before,
+			&[data-type="dotx"]:before,
+			&[data-type="dotm"]:before,
+			&[data-type="docb"]:before,
+			&[data-type="doc"]:before {
+				content: "\f1c2";
+			}
+
+			&[data-type="xml"]:before,
+			&[data-type="xlsm"]:before,
+			&[data-type="xlsb"]:before,
+			&[data-type="xltm"]:before,
+			&[data-type="xltx"]:before,
+			&[data-type="xlsx"]:before,
+			&[data-type="xls"]:before {
+				content: "\f1c3";
+			}
+
+			&[data-type="ppt"]:before,
+			&[data-type="ppsx"]:before,
+			&[data-type="pptm"]:before,
+			&[data-type="pptx"]:before {
+				content: "\f1c4";
+			}
+
+			&[data-type="jpg"]:before,
+			&[data-type="jpeg"]:before,
+			&[data-type="bmp"]:before,
+			&[data-type="tiff"]:before,
+			&[data-type="psd"]:before,
+			&[data-type="png"]:before {
+				content: "\f1c5";
+			}
+
+			&[data-type="zip"]:before,
+			&[data-type="z7"]:before,
+			&[data-type="rar"]:before,
+			&[data-type="tar"]:before,
+			&[data-type="ace"]:before,
+			&[data-type="zipx"]:before {
+				content: "\f1c6";
+			}
+
+			&[data-type="mp3"]:before,
+			&[data-type="wav"]:before,
+			&[data-type="wma"]:before,
+			&[data-type="mid"]:before,
+			&[data-type="ogg"]:before,
+			&[data-type="flac"]:before {
+				content: "\f1c7";
+			}
+
+			&[data-type="avi"]:before,
+			&[data-type="asf"]:before,
+			&[data-type="mov"]:before,
+			&[data-type="qt"]:before,
+			&[data-type="flv"]:before,
+			&[data-type="mpg"]:before,
+			&[data-type="mpeg"]:before,
+			&[data-type="wmv"]:before,
+			&[data-type="mp4"]:before {
+				content: "\f1c8";
+			}
+
+			&[data-type="php"]:before,
+			&[data-type="aspx"]:before,
+			&[data-type="vb"]:before,
+			&[data-type="ashx"]:before,
+			&[data-type="cs"]:before,
+			&[data-type="html"]:before,
+			&[data-type="js"]:before,
+			&[data-type="scss"]:before,
+			&[data-type="css"]:before {
+				content: "\f1c9";
+			}
+		}
+	}
+}

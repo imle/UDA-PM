@@ -1,0 +1,115 @@
+@import "mixins";
+
+#login-form {
+	@media only screen and (min-width: 700px) {
+		margin-top: 60px;
+	}
+
+	@media only screen and (min-width: 500px) and (max-width: 699px) {
+		margin-top: 30px;
+	}
+
+	&.card {
+		max-width: 350px;
+		padding: 30px 40px 20px;
+	}
+
+	.alert {
+		padding: 5px 8px;
+	}
+
+	.btn {
+		font-weight: 700;
+		padding: 0;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		line-height: 34px;
+		cursor: pointer;
+		background-color: #6891a2;
+		font-size: 14px;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+		border: none;
+
+		@include transition(all 0.25s);
+
+		&:hover, &:focus, &:active {
+			background-color: #1b6d85;
+		}
+	}
+
+	.form-signin .form-control:focus {
+		border-color: #6891a2;
+		outline: 0;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px #6891a2;
+		-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px #6891a2;
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px #6891a2;
+	}
+
+	#profile-img {
+		display: block;
+		border-radius: 50%;
+		height: 100px;
+		width: 100px;
+		margin: 0 auto 20px;
+		background: url('//ssl.gstatic.com/accounts/ui/avatar_2x.png') no-repeat top center;
+		background-size: cover;
+	}
+
+	a {
+		color: #6891a2;
+		cursor: pointer;
+
+		&:hover, &:active, & :focus {
+			color: #1b6d85;
+		}
+	}
+
+	.input-group {
+		margin-bottom: 10px;
+
+		.form-control {
+			margin-bottom: 0;
+		}
+	}
+
+	#profile-name {
+		display: block;
+		text-align: center;
+		font-weight: 700;
+		font-size: 18px;
+		margin-bottom: 6px;
+	}
+
+	#reauth-email {
+		display: block;
+		text-align: center;
+		margin: 0 10px 16px;
+	}
+
+	#use-another-account {
+		display: none;
+		padding: 10px 0 0;
+		margin: 0;
+		text-align: center;
+	}
+
+	@include animation('fade-in-up 1 .5s');
+}
+
+@include keyframes(fade-in-up) {
+	0% {
+		@include transform(translate(0, 20px));
+
+		opacity: 0;
+	}
+
+	100% {
+		@include transform(translate(0, 0));
+
+		opacity: 1;
+	}
+}

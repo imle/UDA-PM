@@ -1,0 +1,50 @@
+.comment_thread {
+	position: relative;
+	margin-left: 40px;
+	border-left: 1px solid #6595ed;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+
+	.comment {
+		padding-top: 20px;
+
+		.avatar {
+			display: inline-block;
+			margin-left: -20px;
+
+			img {
+				width: 39px;
+			}
+		}
+
+		.comment_body {
+			padding-top: 10px;
+			margin-left: 40px;
+			margin-right: 20px;
+
+			p {
+				margin-right: 20px;
+			}
+		}
+	}
+
+	&.empty {
+		.message {
+			padding-top: 15px;
+			padding-left: 10px;
+		}
+	}
+
+	&:after {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 9px;
+		height: 9px;
+		margin-left: -5px;
+		background-color: #fff;
+		border: 1px solid #6595ed;
+		border-radius: 10px;
+		content: '';
+	}
+}

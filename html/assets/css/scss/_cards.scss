@@ -1,0 +1,31 @@
+@import "mixins";
+
+.card {
+	background-color: #F7F7F7;
+	padding: 20px 25px 30px;
+	margin: 0 auto 25px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+
+	@include shadow(2);
+
+	select,
+	button,
+	input[type=text],
+	input[type=email],
+	input[type=password],
+	input[type=number] {
+		height: 36px;
+		width: 100%;
+		display: block;
+		margin-bottom: 10px;
+		z-index: 1;
+		position: relative;
+	}
+
+	.input-group-addon {
+		padding: 4px;
+		cursor: pointer;
+	}
+}

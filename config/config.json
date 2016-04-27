@@ -1,0 +1,21 @@
+{
+	"storage": {
+		"adapter": "local",
+		"sftp": {
+			"host": "127.0.0.1",
+			"port": 21,
+			"username": "username",
+			"password": "password",
+			"privateKey": "/local/path/to/or/contents/of/privatekey",
+			"root": "/",
+			"timeout": 10
+		},
+		"path": "/Users/ski/Sites/UDA/PM/files"
+	},
+	"environment": "dev",
+	"dev_user_emails": [
+		"simle@uda1.com"
+	],
+	"base_url": "pm.dev",
+	"last_update": "2016-02-07"
+}
