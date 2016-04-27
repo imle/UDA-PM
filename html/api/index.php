@@ -122,7 +122,7 @@
 				"err" => true,
 				"msg" => "Path not defined.",
 			];
-		});
+		}); // !TODO:
 
 		$router->map("DELETE", "/projects/[i:id]/", function($id) use ($_pdo, $_auth) {
 			$project = Project::find($_pdo, $id);
@@ -212,21 +212,21 @@
 				"err" => true,
 				"msg" => "Path not defined.",
 			];
-		});
+		}); // !TODO:
 
 		$router->map("PUT", "/projects/[i:id]/attachments/[i:id]/", function($id) use ($_pdo) {
 			return [
 				"err" => true,
 				"msg" => "Path not defined.",
 			];
-		});
+		}); // !TODO:
 
 		$router->map("DELETE", "/projects/[i:id]/attachments/[i:id]/", function($id) use ($_pdo) {
 			return [
 				"err" => true,
 				"msg" => "Path not defined.",
 			];
-		});
+		}); // !TODO:
 
 
 
@@ -265,6 +265,30 @@
 				"user" => $user->toArray()
 			];
 		});
+
+		$router->map("POST", "/users/", function() use ($_pdo) {
+			return [
+				"err" => true,
+				"msg" => "Path not defined.",
+			];
+		}); // !TODO:
+
+		$router->map("PUT", "/users/[i:id]/", function($id) use ($_pdo) {
+			return [
+				"err" => true,
+				"msg" => "Path not defined.",
+			];
+		}); // !TODO:
+
+		$router->map("DELETE", "/users/[i:id]/", function($id) use ($_pdo) {
+			return [
+				"err" => true,
+				"msg" => "Path not defined.",
+			];
+		}); // !TODO:
+
+
+
 
 		$router->map("GET", "/users/[i:id]/projects/[assigned|lead|created:type]?/", function($id, $type) use ($_pdo) {
 			$offset = Utility::cleanInt($_GET["offset"], 0, 0);
@@ -308,25 +332,6 @@
 				}, $projects)
 			];
 		});
-
-
-
-
-
-		$router->map("POST", "/users/", function() use ($_pdo) {
-			return [
-				"get" => $_GET,
-				"post" => $_POST
-			];
-		});
-
-		$router->map("PUT", "/users/[i:id]/", function($id) use ($_pdo) {
-			return [
-				"id" => $id,
-				"get" => $_GET,
-				"post" => $_POST
-			];
-		});
 	}
 
 
@@ -363,7 +368,8 @@
 		header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
 
 		echo json_encode([
-			"uri" => $_SERVER["REQUEST_URI"],
-			"message" => "Invalid Request URI"
+			"err" => true,
+			"msg" => "Invalid Request URI",
+			"uri" => $_SERVER["REQUEST_URI"]
 		], $pretty | JSON_UNESCAPED_SLASHES);
 	}
