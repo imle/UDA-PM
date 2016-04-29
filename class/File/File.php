@@ -32,13 +32,14 @@
 		public static function create(Base $_pdo, FilesystemInterface $_fs, User $_user,
 		                              string $name, string $temp_location) : self {
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
+			$name = pathinfo($name, PATHINFO_FILENAME);
 
 			if (!strlen($extension))
 				throw new Exception("Invalid file extension.");
 
-			$mime_type = mime_content_type($name);
+			$mime_type = mime_content_type($temp_location);
 
-			if (!strlen($mime_type))
+			if (!$mime_type || !strlen($mime_type))
 				throw new Exception("Invalid file extension.");
 
 			$query = "INSERT INTO `file` (user_id, original_name, extension, size, md5, mime_type, date_added)
@@ -142,12 +143,6 @@
 		 * @param resource $stream
 		 */
 		public function write(FilesystemInterface $_fs, $stream) {
-			if (!$_fs->has($this->getDirMain()))
-				$_fs->createDir($this->getDirMain());
-
-			if (!$_fs->has($this->getDirSub()))
-				$_fs->createDir($this->getDirSub());
-
 			$_fs->writeStream($this->getPath(), $stream, [
 				"visibility" => AdapterInterface::VISIBILITY_PUBLIC
 			]);
@@ -181,7 +176,7 @@
 		 * @return self
 		 */
 		public static function find(Base $_pdo, int $id) {
-			$query = "SELECT * FROM `file` f WHERE id = :id";
+			$query = "SELECT * FROM `file` WHERE id = :id";
 
 			$row = $_pdo->fetchOne($query, [
 				"id" => $id

@@ -20,7 +20,9 @@
 <div class="container-fluid">
 	<div class="row">
 		<div id="" class="col-lg-6">
-
+<!--			<form action="/"-->
+<!--			      class="dropzone"-->
+<!--			      id="my-awesome-dropzone"></form>-->
 		</div>
 
 		<div id="project_data" class="col-lg-6">
@@ -121,17 +123,7 @@
 				</h4>
 			</div>
 			<div class="modal-body">
-				<div class="input-group">
-	                <span class="input-group-btn">
-	                    <span class="btn btn-primary btn-file">
-	                        Browse… <input type="file" multiple="" data-target="#file-name">
-	                    </span>
-	                </span>
-					<input type="text" class="form-control" id="file-name" readonly="">
-				</div>
-				<div class="file-drop">
-					<div class="drop_zone">Drop files here</div>
-				</div>
+				<div class="dropzone" id="attachment_upload"></div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

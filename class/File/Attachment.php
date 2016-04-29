@@ -41,6 +41,11 @@
 
 			$temp = new self($_pdo);
 			$temp->_file = $_file;
+			$temp->extension = $_file->getExtension();
+			$temp->md5 = $_file->getMd5();
+			$temp->mime_type = $_file->getMimeType();
+			$temp->original_name = $_file->getOriginalName();
+			$temp->size = $_file->getSize();
 			$temp->_user = $_user;
 			$temp->_project = $_project;
 			$temp->_pdo->perform($query, [
@@ -131,7 +136,7 @@
 		 * @return self
 		 */
 		public static function find(Base $_pdo, int $id) {
-			$query = "SELECT * FROM attachment f WHERE id = :id";
+			$query = "SELECT * FROM attachment WHERE id = :id";
 
 			$row = $_pdo->fetchOne($query, [
 				"id" => $id
@@ -149,15 +154,15 @@
 		 */
 		public static function findAllForProject(Base $_pdo, Project $_project,
 		                                         int $offset = 0, int $limit = 30) : array {
-			$query = "SELECT a.id, a.file_id, a.project_id, COALESCE(a.name, f.original_name) AS `name`,
-					  f.extension, f.size, f.md5, f.mime_type, a.date_added
+			$query = "SELECT a.id, a.user_id, a.file_id, a.project_id, COALESCE(a.name, f.original_name) AS `name`,
+					  f.extension, f.size, f.md5, f.mime_type, a.date_added, f.original_name
 					  FROM attachment a LEFT JOIN file f ON a.file_id = f.id
 					  WHERE a.project_id = :p GROUP BY a.id";
 
 			if ($limit != -1)
 				$query .= " LIMIT :o, :l";
 
-			return $_pdo->fetchAssoc($query, [
+			return $_pdo->fetchAll($query, [
 				"o" => $offset,
 				"l" => $limit,
 				"p" => $_project->getId()

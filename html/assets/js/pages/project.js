@@ -6,6 +6,7 @@ Project = {
 		this.bootstrapData();
 		this.printComments();
 		this.printAttachments();
+		this.setupDropzone();
 	},
 	elements: {
 		$projectComments: undefined,
@@ -102,19 +103,61 @@ Project = {
 		}
 	},
 	printAttachments: function() {
-		this.elements.$projectAttachments.html(this.data.files.reduce(function(str, f) {
+		this.elements.$projectAttachments.html(this.data.files.reduce(function(str, a) {
 			return str + Util.parse.template(Project.templates.file, {
-				id: f.id,
-				name: f.getFullName(),
-				size: f.sizeMin(1),
-				type: f.extension,
-				uploader: PM.User.find(PM.data.users, f.user_id).getFullName()
+				id: a.id,
+				name: a.getFullName(),
+				size: a.sizeMin(1),
+				type: a.extension,
+				uploader: PM.User.find(PM.data.users, a.user_id).getFullName()
 			});
 		}, ""));
 	},
+	createNewAttachment: function(file) {
+		var attachment = new PM.Attachment({
+			file_id: file["id"],
+			user_id: session.user.id,
+			project_id: Project.data.project.id,
+			name: file["name"],
+			extension: file["extension"],
+			mime_type: file["mime_type"],
+			size: file["size"],
+			md5: file["md5"],
+			original_name: file["name"],
+			date_added: new Date()
+		});
+
+		attachment.save(function(data) {
+			console.log(data);
+		});
+	},
 	setupDropzone: function() {
-		Project.elements.$dropZone.dropzone({
-			url: "/service/file/post"
+		$(".dropzone").dropzone({
+			url: "/service/file/post/",
+			method: "POST",
+			success: function(file, data) {
+				Project.createNewAttachment(data["file"]);
+			},
+			error: function(file, response) {
+				console.log(file, response);
+
+				var node, _i, _len, _ref, _results, message = "";
+
+				var data = JSON.parse(file.xhr.responseText);
+
+				if (Util.clean.boolean(data["err"], true)) {
+					message = JSON.parse(file.xhr.responseText)["msg"];
+				}
+
+				file.previewElement.classList.add("dz-error");
+				_ref = file.previewElement.querySelectorAll("[data-dz-errormessage]");
+				_results = [];
+				for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+					node = _ref[_i];
+					_results.push(node.textContent = message);
+				}
+				return _results;
+			}
 		});
 	}
 };

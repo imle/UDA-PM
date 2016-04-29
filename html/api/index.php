@@ -17,10 +17,7 @@
 
 	if (!Utility::isDevServer()) {
 		$router->map("GET", "[*]", function() use ($_pdo) {
-			return [
-				"err" => true,
-				"msg" => "API is still under development."
-			];
+			return Utility::errorJson("API is still under development.");
 		});
 	}
 	else {
@@ -118,10 +115,7 @@
 		});
 
 		$router->map("PUT", "/projects/[i:id]/", function($id) use ($_pdo) {
-			return [
-				"err" => true,
-				"msg" => "Path not defined.",
-			];
+			return Utility::errorJson("Path not defined.");
 		}); // !TODO:
 
 		$router->map("DELETE", "/projects/[i:id]/", function($id) use ($_pdo, $_auth) {
@@ -152,10 +146,7 @@
 			$project = Project::find($_pdo, $id);
 
 			if (!$project) {
-				return [
-					"err" => true,
-					"msg" => "No project found with given id"
-				];
+				return Utility::errorJson("No project found with given id");
 			}
 
 			return [
@@ -172,8 +163,8 @@
 
 
 
-		$router->map("GET", "/projects/[i:id]/attachments/", function($id) use ($_pdo, $_auth) {
-			$project = Project::find($_pdo, $id);
+		$router->map("GET", "/projects/[i:pid]/attachments/", function($pid) use ($_pdo, $_auth) {
+			$project = Project::find($_pdo, $pid);
 
 			$offset = Utility::cleanInt($_GET["offset"], 0, 0);
 
@@ -197,7 +188,7 @@
 			];
 		});
 
-		$router->map("GET", "/projects/[i:id]/attachments/[i:id]/", function($id) use ($_pdo) {
+		$router->map("GET", "/projects/[i:pid]/attachments/[i:id]/", function($pid, $id) use ($_pdo) {
 			$attachment = Attachment::find($_pdo, $id);
 
 			return [
@@ -207,25 +198,37 @@
 			];
 		});
 
-		$router->map("POST", "/projects/[i:id]/attachments/", function($id) use ($_pdo) {
+		$router->map("POST", "/projects/[i:pid]/attachments/", function($pid) use ($_pdo, $_auth) {
+			$file_id = Utility::cleanInt($_POST["file_id"]);
+			$project_id = Utility::cleanInt($_POST["project_id"]);
+
+			$_file = File::find($_pdo, $file_id);
+
+			if (is_null($_file)) {
+				return Utility::errorJson("Invalid file data provided.");
+			}
+
+			$_project = Project::find($_pdo, $project_id);
+
+			if (is_null($_project)) {
+				return Utility::errorJson("Invalid project data provided.");
+			}
+
+			$attachment = Attachment::create($_pdo, $_file, $_auth->getUser(), $_project);
+
 			return [
-				"err" => true,
-				"msg" => "Path not defined.",
+				"err" => !$attachment,
+				"msg" => !$attachment ? "There was an error creating your attachment." : "",
+				"attachment" => $attachment->toArray()
 			];
 		}); // !TODO:
 
-		$router->map("PUT", "/projects/[i:id]/attachments/[i:id]/", function($id) use ($_pdo) {
-			return [
-				"err" => true,
-				"msg" => "Path not defined.",
-			];
+		$router->map("PUT", "/projects/[i:pid]/attachments/[i:id]/", function($pid, $id) use ($_pdo) {
+			return Utility::errorJson("Path not defined.");
 		}); // !TODO:
 
-		$router->map("DELETE", "/projects/[i:id]/attachments/[i:id]/", function($id) use ($_pdo) {
-			return [
-				"err" => true,
-				"msg" => "Path not defined.",
-			];
+		$router->map("DELETE", "/projects/[i:pid]/attachments/[i:id]/", function($pid, $id) use ($_pdo) {
+			return Utility::errorJson("Path not defined.");
 		}); // !TODO:
 
 
@@ -267,24 +270,15 @@
 		});
 
 		$router->map("POST", "/users/", function() use ($_pdo) {
-			return [
-				"err" => true,
-				"msg" => "Path not defined.",
-			];
+			return Utility::errorJson("Path not defined.");
 		}); // !TODO:
 
 		$router->map("PUT", "/users/[i:id]/", function($id) use ($_pdo) {
-			return [
-				"err" => true,
-				"msg" => "Path not defined.",
-			];
+			return Utility::errorJson("Path not defined.");
 		}); // !TODO:
 
 		$router->map("DELETE", "/users/[i:id]/", function($id) use ($_pdo) {
-			return [
-				"err" => true,
-				"msg" => "Path not defined.",
-			];
+			return Utility::errorJson("Path not defined.");
 		}); // !TODO:
 
 
@@ -296,10 +290,7 @@
 			$user = User::find($_pdo, $id);
 
 			if (!$user) {
-				return [
-					"err" => true,
-					"msg" => "No user found with given id",
-				];
+				return Utility::errorJson("No user found with given id");
 			}
 
 			if ($type == "assigned") {

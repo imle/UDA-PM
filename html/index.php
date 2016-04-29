@@ -1,7 +1,6 @@
 <?php
 	use PM\Config;
 	use PM\File\Attachment;
-	use PM\File\File;
 	use PM\Project\Comment;
 	use PM\Project\Project;
 	use PM\User\User;
@@ -29,6 +28,9 @@
 		$_auth->logout();
 	}, "Logout");
 
+
+
+	
 	$router->map("GET", "/projects/", function() use ($_pdo, $_auth) {
 		$_auth->validate();
 
@@ -59,8 +61,6 @@
 
 	$router->map("GET", "/projects/[i:id]/", function($id) use ($_pdo, $_auth) {
 		$_auth->validate();
-
-		$_fs = Config::getFileSystem();
 
 		$project = Project::find($_pdo, $id);
 

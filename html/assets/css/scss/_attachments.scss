@@ -75,6 +75,9 @@
 				content: "\f1c1";
 			}
 
+			&[data-type="numbers"]:before,
+			&[data-type="pages"]:before,
+			&[data-type="keynote"]:before,
 			&[data-type="txt"]:before {
 				content: "\f0f6";
 			}
@@ -145,6 +148,7 @@
 			}
 
 			&[data-type="php"]:before,
+			&[data-type="sql"]:before,
 			&[data-type="aspx"]:before,
 			&[data-type="vb"]:before,
 			&[data-type="ashx"]:before,

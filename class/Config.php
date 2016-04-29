@@ -17,6 +17,10 @@
 		private static $DATA_READ = false;
 		private static $DATA = [];
 
+		const ENV_DEV = "dev";
+		const ENV_TEST = "test";
+		const ENV_PROD = "prod";
+
 		public static function getFilePath() : string {
 			self::readData();
 

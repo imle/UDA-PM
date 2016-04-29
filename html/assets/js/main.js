@@ -405,7 +405,7 @@ Util = {
 		 * @param {function} [callback]
 		 */
 		POST: function(path, obj, callback) {
-			Util.ajax._request("POST", "/api/v1/" + path, obj, { test: 1 }, callback);
+			Util.ajax._request("POST", "/api/v1/" + path, obj, {}, callback);
 		},
 		/**
 		 * @param {string} path
@@ -413,7 +413,7 @@ Util = {
 		 * @param {function} [callback]
 		 */
 		PUT: function(path, obj, callback) {
-			Util.ajax._request("PUT", "/api/v1/" + path, obj, { test: 1 }, callback);
+			Util.ajax._request("PUT", "/api/v1/" + path, obj, {}, callback);
 		},
 		/**
 		 * @param {string} path
@@ -431,6 +431,8 @@ Util = {
 		}
 	}
 };
+
+Dropzone.autoDiscover = false;
 
 
 var session = JSON.parse(localStorage.getItem("session"));
@@ -461,7 +463,7 @@ PM.Model = function(data) {
 PM.Model.prototype.save = function(path, callback) {
 	path = Util.parse.template(path, this);
 
-	if (this.id) {
+	if (!this.id) {
 		Util.REST.POST(path, this.toJSON(), function(data) {
 			Util.clean.func(callback)(data);
 		});
@@ -541,8 +543,8 @@ PM.User.prototype.constructor = PM.User;
  */
 PM.User.find = function(users, id) {
 	return _.find(users, function(user) {
-		return user.id == id;
-	}) || new PM.User();
+			return user.id == id;
+		}) || new PM.User();
 };
 
 PM.User.path = "/users/";
@@ -776,7 +778,7 @@ PM.Comment = function(data) {
 PM.Comment.prototype = Object.create(PM.Model.prototype);
 PM.Comment.prototype.constructor = PM.Comment;
 
-PM.Comment.path = "/project/<%= project_id %>/comment/";
+PM.Comment.path = "/projects/<%= project_id %>/comments/";
 
 PM.Comment.prototype.save = function(path, callback) {
 	if (typeof path === "function") {
@@ -811,20 +813,22 @@ PM.Attachment = function(data) {
 
 	PM.Model.call(this, data);
 
+	this.file_id = Util.clean.integer(data["file_id"]);
 	this.user_id = Util.clean.integer(data["user_id"]);
+	this.project_id = Util.clean.integer(data["project_id"]);
+	this.name = Util.clean.string(data["name"]);
 	this.extension = Util.clean.string(data["extension"]);
 	this.mime_type = Util.clean.string(data["mime_type"]);
 	this.size = Util.clean.integer(data["size"]);
 	this.md5 = Util.clean.string(data["md5"]);
 	this.original_name = Util.clean.string(data["original_name"]);
 	this.date_added = Util.clean.date(data["date_added"]);
-	this.is_image = Util.clean.boolean(data["is_image"]);
 };
 
 PM.Attachment.prototype = Object.create(PM.Model.prototype);
 PM.Attachment.prototype.constructor = PM.Attachment;
 
-PM.Attachment.path = "/attachments/";
+PM.Attachment.path = "/projects/<%= project_id %>/attachments/";
 
 PM.Attachment.prototype.save = function(path, callback) {
 	if (typeof path === "function") {
@@ -838,20 +842,22 @@ PM.Attachment.prototype.save = function(path, callback) {
 PM.Attachment.prototype.toJSON = function() {
 	var obj = PM.Model.prototype.toJSON.call(this);
 
+	obj.file_id = this.file_id;
 	obj.user_id = this.user_id;
+	obj.project_id = this.project_id;
+	obj.name = this.name;
 	obj.extension = this.extension;
 	obj.mime_type = this.mime_type;
 	obj.size = this.size;
 	obj.md5 = this.md5;
 	obj.original_name = this.original_name;
 	obj.date_added = Util.date.YmdHis(this.date_added);
-	obj.is_image = this.is_image;
 
 	return obj;
 };
 
 PM.Attachment.prototype.getFullName = function() {
-	return this.original_name + "." + this.extension;
+	return this.name + "." + this.extension;
 };
 
 /**

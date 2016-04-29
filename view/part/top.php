@@ -16,6 +16,7 @@
 		<link rel="stylesheet" href="/assets/css/libraries/bootstrap/bootstrap.min.css" type="text/css">
 		<link rel="stylesheet" href="/assets/css/libraries/fontawesome/font-awesome.min.css" type="text/css">
 		<link rel="stylesheet" href="/assets/css/libraries/selectize/selectize.css" type="text/css">
+		<link rel="stylesheet" href="/assets/css/libraries/dropzone/dropzone.css" type="text/css">
 		<link rel="stylesheet" href="/assets/css/main.css" type="text/css">
 
 		<!-- Base Javascript -->

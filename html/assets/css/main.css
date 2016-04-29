@@ -82,8 +82,13 @@ body {
     cursor: inherit;
     display: block; }
 
-.drop_zone {
-  line-height: 300px; }
+.dropzone {
+  border: 2px dashed #0087F7;
+  border-radius: 5px;
+  background: white;
+  margin-top: 20px; }
+  .dropzone.dz-drag-hover {
+    border-style: solid; }
 
 /** ----- Header --------------------------------------------------------------------------------------------------- **/
 header.navbar {
@@ -485,7 +490,7 @@ input[type=checkbox] {
         content: "\f016"; }
       .attachment_thread .attachment .icon[data-type="pdf"]:before {
         content: "\f1c1"; }
-      .attachment_thread .attachment .icon[data-type="txt"]:before {
+      .attachment_thread .attachment .icon[data-type="numbers"]:before, .attachment_thread .attachment .icon[data-type="pages"]:before, .attachment_thread .attachment .icon[data-type="keynote"]:before, .attachment_thread .attachment .icon[data-type="txt"]:before {
         content: "\f0f6"; }
       .attachment_thread .attachment .icon[data-type="docx"]:before, .attachment_thread .attachment .icon[data-type="docm"]:before, .attachment_thread .attachment .icon[data-type="dotx"]:before, .attachment_thread .attachment .icon[data-type="dotm"]:before, .attachment_thread .attachment .icon[data-type="docb"]:before, .attachment_thread .attachment .icon[data-type="doc"]:before {
         content: "\f1c2"; }
@@ -501,7 +506,7 @@ input[type=checkbox] {
         content: "\f1c7"; }
       .attachment_thread .attachment .icon[data-type="avi"]:before, .attachment_thread .attachment .icon[data-type="asf"]:before, .attachment_thread .attachment .icon[data-type="mov"]:before, .attachment_thread .attachment .icon[data-type="qt"]:before, .attachment_thread .attachment .icon[data-type="flv"]:before, .attachment_thread .attachment .icon[data-type="mpg"]:before, .attachment_thread .attachment .icon[data-type="mpeg"]:before, .attachment_thread .attachment .icon[data-type="wmv"]:before, .attachment_thread .attachment .icon[data-type="mp4"]:before {
         content: "\f1c8"; }
-      .attachment_thread .attachment .icon[data-type="php"]:before, .attachment_thread .attachment .icon[data-type="aspx"]:before, .attachment_thread .attachment .icon[data-type="vb"]:before, .attachment_thread .attachment .icon[data-type="ashx"]:before, .attachment_thread .attachment .icon[data-type="cs"]:before, .attachment_thread .attachment .icon[data-type="html"]:before, .attachment_thread .attachment .icon[data-type="js"]:before, .attachment_thread .attachment .icon[data-type="scss"]:before, .attachment_thread .attachment .icon[data-type="css"]:before {
+      .attachment_thread .attachment .icon[data-type="php"]:before, .attachment_thread .attachment .icon[data-type="sql"]:before, .attachment_thread .attachment .icon[data-type="aspx"]:before, .attachment_thread .attachment .icon[data-type="vb"]:before, .attachment_thread .attachment .icon[data-type="ashx"]:before, .attachment_thread .attachment .icon[data-type="cs"]:before, .attachment_thread .attachment .icon[data-type="html"]:before, .attachment_thread .attachment .icon[data-type="js"]:before, .attachment_thread .attachment .icon[data-type="scss"]:before, .attachment_thread .attachment .icon[data-type="css"]:before {
         content: "\f1c9"; }
 
 /** ----- Project -------------------------------------------------------------------------------------------------- **/
