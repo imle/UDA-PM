@@ -17,6 +17,7 @@
 		"altorouter/altorouter": "v1.1.0",
 		"smottt/wideimage": "1.1.1",
 		"phpmailer/phpmailer": "5.4.x-dev",
-		"cboden/ratchet": "0.4.x-dev"
+		"cboden/ratchet": "0.4.x-dev",
+		"robmorgan/phinx": "v0.5.3"
 	}
 }
