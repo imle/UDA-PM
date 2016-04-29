@@ -6,16 +6,17 @@
 			"port": 21,
 			"username": "username",
 			"password": "password",
-			"privateKey": "/local/path/to/or/contents/of/privatekey",
+			"privateKey": "/local/path/to/or/contents/of/private/key",
 			"root": "/",
 			"timeout": 10
 		},
-		"path": "/Users/ski/Sites/UDA/PM/files"
+		"path": "/files",
+		"max_file_size": "200M"
 	},
 	"environment": "dev",
 	"dev_user_emails": [
-		"simle@uda1.com"
+		"email@example.com"
 	],
 	"base_url": "pm.dev",
-	"last_update": "2016-02-07"
+	"last_update": "2015-01-01"
 }

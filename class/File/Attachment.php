@@ -2,6 +2,7 @@
 	namespace PM\File;
 
 	use DateTime;
+	use League\Flysystem\FilesystemInterface;
 	use PM\PDO\Base;
 	use PM\Project\Project;
 	use PM\Traits\JSON;
@@ -44,7 +45,7 @@
 			$temp->extension = $_file->getExtension();
 			$temp->md5 = $_file->getMd5();
 			$temp->mime_type = $_file->getMimeType();
-			$temp->original_name = $_file->getOriginalName();
+			$temp->name = $temp->original_name = $_file->getOriginalName();
 			$temp->size = $_file->getSize();
 			$temp->_user = $_user;
 			$temp->_project = $_project;
@@ -101,7 +102,11 @@
 		}
 
 		public function getName() : string {
-			return $this->name;
+			return $this->name ?? $this->original_name;
+		}
+
+		public function getFullName() : string {
+			return $this->getName() . "." . $this->getExtension();
 		}
 
 		public function getExtension() : string {
@@ -128,7 +133,15 @@
 			return Utility::getDateTimeFromMySQLDateTime($this->date_added);
 		}
 
-		/* Create */
+		public function remove(FilesystemInterface $_fs) {
+			$this->_pdo->perform("DELETE FROM attachment WHERE id = :i", [
+				"i" => $this->id
+			]);
+
+			return $this->getFile()->remove($_fs);
+		}
+
+		/* Static Find Functions */
 
 		/**
 		 * @param Base $_pdo
@@ -136,9 +149,30 @@
 		 * @return self
 		 */
 		public static function find(Base $_pdo, int $id) {
-			$query = "SELECT * FROM attachment WHERE id = :id";
+			$query = "SELECT a.id, a.user_id, a.file_id, a.project_id, COALESCE(a.name, f.original_name) AS `name`,
+					  f.extension, f.size, f.md5, f.mime_type, a.date_added, f.original_name
+					  FROM attachment a LEFT JOIN file f ON a.file_id = f.id WHERE a.id = :id";
 
 			$row = $_pdo->fetchOne($query, [
+				"id" => $id
+			]);
+
+			return self::getInstance($_pdo, $row);
+		}
+
+		/**
+		 * @param Base $_pdo
+		 * @param Project $_project
+		 * @param int $id
+		 * @return self
+		 */
+		public static function findProject(Base $_pdo, Project $_project, int $id) {
+			$query = "SELECT a.id, a.user_id, a.file_id, a.project_id, COALESCE(a.name, f.original_name) AS `name`,
+					  f.extension, f.size, f.md5, f.mime_type, a.date_added, f.original_name
+					  FROM attachment a LEFT JOIN file f ON a.file_id = f.id WHERE a.project_id = :pid AND a.id = :id";
+
+			$row = $_pdo->fetchOne($query, [
+				"pid" => $_project->getId(),
 				"id" => $id
 			]);
 

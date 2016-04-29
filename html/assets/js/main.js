@@ -417,13 +417,19 @@ Util = {
 		},
 		/**
 		 * @param {string} path
-		 * @param {object} obj
+		 * @param {object|function} [obj]
 		 * @param {object|function} [data]
 		 * @param {function} [callback]
 		 */
 		DELETE: function(path, obj, data, callback) {
 			if (typeof data == "function") {
 				callback = data;
+				data = {};
+			}
+
+			if (typeof obj == "function") {
+				callback = obj;
+				obj = {};
 				data = {};
 			}
 
@@ -475,16 +481,16 @@ PM.Model.prototype.save = function(path, callback) {
 	}
 };
 
-/**
- * @param {string} path
- * @param {function} [callback]
- */
+// /**
+//  * @param {string} path
+//  * @param {function} [callback]
+//  */
 PM.Model.prototype.delete = function(path, callback) {
 	path = Util.parse.template(path, this);
 
 	path = path + "/" + this.id + "/";
 
-	Util.REST.DELETE(path, this.toJSON(), function(data) {
+	Util.REST.DELETE(path, function(data) {
 		Util.clean.func(callback)(data);
 	});
 };
@@ -829,6 +835,7 @@ PM.Attachment.prototype = Object.create(PM.Model.prototype);
 PM.Attachment.prototype.constructor = PM.Attachment;
 
 PM.Attachment.path = "/projects/<%= project_id %>/attachments/";
+PM.Attachment.file_size_base = 1000;
 
 PM.Attachment.prototype.save = function(path, callback) {
 	if (typeof path === "function") {
@@ -836,7 +843,20 @@ PM.Attachment.prototype.save = function(path, callback) {
 		path = "";
 	}
 
-	PM.Model.prototype.save.call(this, path || PM.Attachment.path, callback);
+	PM.Model.prototype.save.call(this, path || PM.Attachment.path, (function(data) {
+		if (!data["err"]) {
+			this.constructor(data["attachment"]);
+		}
+
+		callback(data);
+	}).bind(this));
+};
+
+/**
+ * @param {function} callback
+ */
+PM.Attachment.prototype.delete = function(callback) {
+	PM.Model.prototype.delete.call(this, PM.Attachment.path, callback);
 };
 
 PM.Attachment.prototype.toJSON = function() {
@@ -857,7 +877,7 @@ PM.Attachment.prototype.toJSON = function() {
 };
 
 PM.Attachment.prototype.getFullName = function() {
-	return this.name + "." + this.extension;
+	return (this.name || this.original_name) + "." + this.extension;
 };
 
 /**
@@ -873,11 +893,11 @@ PM.Attachment.prototype.sizeAs = function(format, fix) {
 	//noinspection FallThroughInSwitchStatementJS
 	switch (format) {
 		case "gb":
-			size = size / 1024;
+			size = size / PM.Attachment.file_size_base;
 		case "mb":
-			size = size / 1024;
+			size = size / PM.Attachment.file_size_base;
 		case "kb":
-			size = size / 1024;
+			size = size / PM.Attachment.file_size_base;
 		case "b":
 			return size.toFixed(fix || 2);
 		default:
@@ -892,20 +912,20 @@ PM.Attachment.prototype.sizeAs = function(format, fix) {
 PM.Attachment.prototype.sizeMin = function(fix) {
 	var size = this.size;
 
-	if (size < 1024)
+	if (size < PM.Attachment.file_size_base)
 		return size.toFixed(fix || 2) + " B";
 
-	size = size / 1024;
+	size = size / PM.Attachment.file_size_base;
 
-	if (size < 1024)
+	if (size < PM.Attachment.file_size_base)
 		return size.toFixed(fix || 2) + " KB";
 
-	size = size / 1024;
+	size = size / PM.Attachment.file_size_base;
 
-	if (size < 1024)
+	if (size < PM.Attachment.file_size_base)
 		return size.toFixed(fix || 2) + " MB";
 
-	size = size / 1024;
+	size = size / PM.Attachment.file_size_base;
 
 	return size.toFixed(fix || 2) + " GB";
 };

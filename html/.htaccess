@@ -10,9 +10,9 @@ RewriteCond %{REQUEST_URI} ^/service/email
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . service/email/index.php [L]
 
-RewriteCond %{REQUEST_URI} ^/service/file/post
+RewriteCond %{REQUEST_URI} ^/service/file
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule . service/upload.php [L]
+RewriteRule . service/file.php [L]
 
 RewriteCond %{REQUEST_URI} ^/service
 RewriteCond %{REQUEST_FILENAME} !-f

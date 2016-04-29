@@ -20,9 +20,6 @@
 <div class="container-fluid">
 	<div class="row">
 		<div id="" class="col-lg-6">
-<!--			<form action="/"-->
-<!--			      class="dropzone"-->
-<!--			      id="my-awesome-dropzone"></form>-->
 		</div>
 
 		<div id="project_data" class="col-lg-6">
@@ -126,8 +123,7 @@
 				<div class="dropzone" id="attachment_upload"></div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary" id="add_attachment">Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Finished</button>
 			</div>
 		</div>
 	</div>
@@ -157,21 +153,24 @@
 		<div class="type">Type: <span><%= type %></span></div>
 		<div class="uploader">Uploaded By: <span><%= uploader %></span></div>
 	</div>
-	<div class="download fa fa-download"></div>
+	<div class="options">
+		<a class="option fa fa-download" href="/service/file/<%= id %>/"></a>
+		<div class="option fa fa-remove" data-action="remove"></div>
+	</div>
 </div>
 </script>
 
 <script type="text/javascript">
 	var bootstrap_project;
 	var bootstrap_comments;
-	var bootstrap_files;
+	var bootstrap_attachments;
 
 	<?php if ($project) { ?>
 		bootstrap_project = <?= json_encode($project->toArray()); ?>;
 		bootstrap_comments = <?= json_encode(array_map(function(\PM\Project\Comment $comment) {
 			return $comment->toArray();
 		}, $comments)); ?>;
-		bootstrap_files = <?= json_encode(array_map(function(\PM\File\Attachment $file) {
+		bootstrap_attachments = <?= json_encode(array_map(function(\PM\File\Attachment $file) {
 			return $file->toArray();
 		}, $attachments)); ?>;
 	<?php } ?>

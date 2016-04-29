@@ -189,7 +189,13 @@
 		});
 
 		$router->map("GET", "/projects/[i:pid]/attachments/[i:id]/", function($pid, $id) use ($_pdo) {
-			$attachment = Attachment::find($_pdo, $id);
+			$project = Project::find($_pdo, $pid);
+
+			if (is_null($project)) {
+				return Utility::errorJson("Invalid project data provided.");
+			}
+
+			$attachment = Attachment::findProject($_pdo, $project, $id);
 
 			return [
 				"err" => !$attachment,
@@ -202,19 +208,19 @@
 			$file_id = Utility::cleanInt($_POST["file_id"]);
 			$project_id = Utility::cleanInt($_POST["project_id"]);
 
-			$_file = File::find($_pdo, $file_id);
+			$file = File::find($_pdo, $file_id);
 
-			if (is_null($_file)) {
+			if (is_null($file)) {
 				return Utility::errorJson("Invalid file data provided.");
 			}
 
-			$_project = Project::find($_pdo, $project_id);
+			$project = Project::find($_pdo, $project_id);
 
-			if (is_null($_project)) {
+			if (is_null($project)) {
 				return Utility::errorJson("Invalid project data provided.");
 			}
 
-			$attachment = Attachment::create($_pdo, $_file, $_auth->getUser(), $_project);
+			$attachment = Attachment::create($_pdo, $file, $_auth->getUser(), $project);
 
 			return [
 				"err" => !$attachment,
@@ -228,7 +234,24 @@
 		}); // !TODO:
 
 		$router->map("DELETE", "/projects/[i:pid]/attachments/[i:id]/", function($pid, $id) use ($_pdo) {
-			return Utility::errorJson("Path not defined.");
+			$project = Project::find($_pdo, $pid);
+
+			if (is_null($project)) {
+				return Utility::errorJson("Invalid project data provided.");
+			}
+
+			$attachment = Attachment::findProject($_pdo, $project, $id);
+
+			if (is_null($attachment)) {
+				return Utility::errorJson("Invalid attachment data provided.");
+			}
+
+			$attachment->remove(\PM\Config::getFileSystem());
+
+			return [
+				"err" => false,
+				"msg" => ""
+			];
 		}); // !TODO:
 
 

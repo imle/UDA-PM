@@ -74,6 +74,12 @@
 			return self::$FILESYSTEM = new Filesystem($adapter);
 		}
 
+		public static function getMaxFileSize() : string {
+			self::readData();
+
+			return self::$DATA["storage"]["max_file_size"];
+		}
+
 		public static function getLastUpdate() : string {
 			self::readData();
 

@@ -13,7 +13,7 @@ Project = {
 		$projectAttachments: undefined,
 		$removeProject: undefined,
 		$projectAddData: undefined,
-		$dropZone: undefined
+		$dropzone: undefined
 	},
 	templates: {
 		comment: "",
@@ -29,7 +29,7 @@ Project = {
 		this.elements.$projectAttachments = $("#project_attachments");
 		this.elements.$removeProject = $("#remove_project");
 		this.elements.$projectAddData = $("#project_add_data");
-		this.elements.$dropZone = $("#drop_zone");
+		this.elements.$dropzone = $("#attachment_upload");
 
 		this.modals.$deleteProject = $("#delete_prj");
 		this.modals.$addComment = $("#add_comment");
@@ -41,6 +41,7 @@ Project = {
 	setEventListeners: function() {
 		this.elements.$removeProject.click(this.event_functions.deleteProject);
 		this.elements.$projectAddData.click(this.event_functions.addData);
+		this.elements.$projectAttachments.on("click", "[data-action='remove']", this.event_functions.removeAttachment);
 	},
 	event_functions: {
 		imgError: function() {
@@ -63,8 +64,32 @@ Project = {
 				Project.modals.$addComment.modal("toggle");
 			}
 			else if (Project.elements.$projectAttachments.hasClass("active")) {
+				Project.elements.$dropzone[0].dropzone.removeAllFiles();
+
 				Project.modals.$addAttachment.modal("toggle");
 			}
+		},
+		removeAttachment: function(e) {
+			var $row = $(e.currentTarget).parents(".attachment");
+
+			var attachment_id = $row.data("id");
+
+			var attachment = Project.data.attachments.find(function(a) {
+				return a.id == attachment_id;
+			});
+			
+			attachment.delete(function(data) {
+				if (Util.clean.boolean(data["err"])) {
+					alert(data["msg"]);
+				}
+				else {
+					Project.data.attachments = Project.data.attachments.filter(function(a) {
+						return a.id != attachment_id;
+					});
+
+					$row.remove();
+				}
+			});
 		}
 	},
 	data: {
@@ -73,7 +98,7 @@ Project = {
 		/** @type Array.<PM.Comment> */
 		comments: [],
 		/** @type Array.<PM.Attachment> */
-		files: []
+		attachments: []
 	},
 	bootstrapData: function() {
 		this.data.project = new PM.Project(bootstrap_project);
@@ -82,7 +107,7 @@ Project = {
 			return new PM.Comment(comment);
 		});
 
-		this.data.files = bootstrap_files.map(function(attachment) {
+		this.data.attachments = bootstrap_attachments.map(function(attachment) {
 			return new PM.Attachment(attachment);
 		});
 	},
@@ -103,7 +128,7 @@ Project = {
 		}
 	},
 	printAttachments: function() {
-		this.elements.$projectAttachments.html(this.data.files.reduce(function(str, a) {
+		this.elements.$projectAttachments.html(this.data.attachments.reduce(function(str, a) {
 			return str + Util.parse.template(Project.templates.file, {
 				id: a.id,
 				name: a.getFullName(),
@@ -128,15 +153,30 @@ Project = {
 		});
 
 		attachment.save(function(data) {
-			console.log(data);
+			if (Util.clean.boolean("err")) {
+				alert(data["msg"]);
+			}
+			else {
+				Project.data.attachments.push(attachment);
+
+				Project.elements.$projectAttachments.append(Util.parse.template(Project.templates.file, {
+					id: attachment.id,
+					name: attachment.getFullName(),
+					size: attachment.sizeMin(1),
+					type: attachment.extension,
+					uploader: PM.User.find(PM.data.users, attachment.user_id).getFullName()
+				}));
+			}
 		});
 	},
 	setupDropzone: function() {
-		$(".dropzone").dropzone({
-			url: "/service/file/post/",
+		this.elements.$dropzone.dropzone({
+			url: "/service/file/",
 			method: "POST",
 			success: function(file, data) {
 				Project.createNewAttachment(data["file"]);
+
+				Project.elements.$dropzone[0].dropzone.removeFile(file);
 			},
 			error: function(file, response) {
 				console.log(file, response);

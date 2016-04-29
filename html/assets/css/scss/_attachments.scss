@@ -42,23 +42,30 @@
 			}
 		}
 
-		.download {
+		.options {
 			position: absolute;
 			top: 12px;
-			right: 0;
 			bottom: 10px;
-			width: 40px;
-			text-align: center;
-			line-height: 40px;
-			font-size: 20px;
-			cursor: pointer;
+			right: 0;
 
-			&:hover {
-				color: #337ab7;
-			}
+			.option {
+				text-decoration: none;
+				width: 40px;
+				text-align: center;
+				line-height: 40px;
+				font-size: 20px;
+				cursor: pointer;
+				color: #000000;
 
-			&:active {
-				color: #16576a;
+				&:hover {
+					color: #337ab7;
+					outline: none;
+				}
+
+				&:active {
+					color: #16576a;
+					outline: none;
+				}
 			}
 		}
 

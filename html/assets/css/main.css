@@ -468,20 +468,25 @@ input[type=checkbox] {
         display: inline-block; }
       .attachment_thread .attachment .body .type span {
         text-transform: uppercase; }
-    .attachment_thread .attachment .download {
+    .attachment_thread .attachment .options {
       position: absolute;
       top: 12px;
-      right: 0;
       bottom: 10px;
-      width: 40px;
-      text-align: center;
-      line-height: 40px;
-      font-size: 20px;
-      cursor: pointer; }
-      .attachment_thread .attachment .download:hover {
-        color: #337ab7; }
-      .attachment_thread .attachment .download:active {
-        color: #16576a; }
+      right: 0; }
+      .attachment_thread .attachment .options .option {
+        text-decoration: none;
+        width: 40px;
+        text-align: center;
+        line-height: 40px;
+        font-size: 20px;
+        cursor: pointer;
+        color: #000000; }
+        .attachment_thread .attachment .options .option:hover {
+          color: #337ab7;
+          outline: none; }
+        .attachment_thread .attachment .options .option:active {
+          color: #16576a;
+          outline: none; }
     .attachment_thread .attachment .icon {
       float: left;
       font-size: 31px;
