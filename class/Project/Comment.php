@@ -31,21 +31,32 @@
 
 		/* Create */
 
-		public function create(Project $_project, User $_creator, string $text)  {
-			$this->_creator = $_creator;
-			$this->_project = $_project;
+		/**
+		 * @param Base $_pdo
+		 * @param Project $_project
+		 * @param User $_creator
+		 * @param string $text
+		 * @return self
+		 */
+		public static function create(Base $_pdo, Project $_project, User $_creator, string $text) {
+			$temp = new self($_pdo);
 
-			$query = "INSERT INTO `comment` (project_id, creator_id, date_created, text)
+			$temp->_creator = $_creator;
+			$temp->_project = $_project;
+
+			$query = "INSERT INTO `comment` (project_id, creator_id, date_created, `text`)
 					  VALUES (:p, :c, :d, :t)";
 
-			$this->_pdo->perform($query, [
-				"p" => $this->project_id = $_project->getId(),
-				"c" => $this->creator_id = $_creator->getId(),
-				"d" => $this->date_created = Utility::getDateTimeForMySQLDateTime(),
-				"t" => $this->text = $text
+			$_pdo->perform($query, [
+				"p" => $temp->project_id = $_project->getId(),
+				"c" => $temp->creator_id = $_creator->getId(),
+				"d" => $temp->date_created = Utility::getDateTimeForMySQLDateTime(),
+				"t" => $temp->text = $text
 			]);
 
-			$this->id = $this->_pdo->lastInsertId();
+			$temp->id = $_pdo->lastInsertId();
+
+			return $temp;
 		}
 
 		/* Setters */
@@ -101,12 +112,37 @@
 		/**
 		 * @param Base $_pdo
 		 * @param Project $_project
+		 * @param int $id
+		 * @return self
+		 */
+		public static function findProject(Base $_pdo, Project $_project, int $id) {
+			$query = "SELECT * FROM `comment` WHERE id = :i AND project_id = :pid";
+
+			$row = $_pdo->fetchOne($query, [
+				"pid" => $_project->getId(),
+				"id" => $id
+			]);
+
+			return self::getInstance($_pdo, $row);
+		}
+
+		/**
+		 * @param Base $_pdo
+		 * @param Project $_project
+		 * @param int $offset
+		 * @param int $limit
 		 * @return self[]
 		 */
-		public static function findAllForProject(Base $_pdo, Project $_project) : array {
+		public static function findAllForProject(Base $_pdo, Project $_project,
+		                                         int $offset = 0, int $limit = 30) : array {
 			$query = "SELECT * FROM `comment` WHERE project_id = :p ORDER BY date_created DESC";
 
+			if ($limit != -1)
+				$query .= " LIMIT :o, :l";
+
 			return $_pdo->fetchAll($query, [
+				"o" => $offset,
+				"l" => $limit,
 				"p" => $_project->getId()
 			], function($row) use ($_pdo, $_project) {
 				$temp = self::getInstance($_pdo, $row);
@@ -118,12 +154,20 @@
 		/**
 		 * @param Base $_pdo
 		 * @param User $_creator
+		 * @param int $offset
+		 * @param int $limit
 		 * @return self[]
 		 */
-		public static function findForUser(Base $_pdo, User $_creator) : array {
+		public static function findForUser(Base $_pdo, User $_creator,
+		                                   int $offset = 0, int $limit = 30) : array {
 			$query = "SELECT * FROM `comment` WHERE creator_id = :c ORDER BY date_created DESC";
 
+			if ($limit != -1)
+				$query .= " LIMIT :o, :l";
+
 			return $_pdo->fetchAll($query, [
+				"o" => $offset,
+				"l" => $limit,
 				"c" => $_creator->getId()
 			], function($row) use ($_pdo, $_creator) {
 				$temp = self::getInstance($_pdo, $row);

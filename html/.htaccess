@@ -4,7 +4,7 @@ RewriteCond %{REQUEST_URI} !(/$|\.)
 RewriteRule (.*) %{REQUEST_URI}/ [R=301,L]
 
 RewriteCond %{REQUEST_URI} ^/api
-RewriteRule . api/index.php [L]
+RewriteRule . api/v1.php [L]
 
 RewriteCond %{REQUEST_URI} ^/service/email
 RewriteCond %{REQUEST_FILENAME} !-f

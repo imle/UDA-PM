@@ -153,6 +153,16 @@
 			]);
 		}
 
+		public function setLmod(User $user) {
+			$query = "UPDATE project SET date_lmod = :d, user_lmod_id = :u WHERE id = :i";
+
+			$this->_pdo->perform($query, [
+				"d" => $this->date_lmod = Utility::getDateTimeForMySQLDateTime(),
+				"u" => $user->getId(),
+				"i" => $this->id
+			]);
+		}
+
 		/* Getters */
 
 		public function getId() : int {

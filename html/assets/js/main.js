@@ -694,7 +694,7 @@ PM.Project.prototype.getUserRelationInt = function(user) {
  * @returns {string}
  */
 PM.Project.prototype.getUserRelation = function(user) {
-	return ["Lead", "Creator", "Assigned", "None"][this.getUserRelationInt(user)];
+	return ["None", "Assigned", "Lead", "Creator"][this.getUserRelationInt(user)];
 };
 
 /**
@@ -792,7 +792,20 @@ PM.Comment.prototype.save = function(path, callback) {
 		path = "";
 	}
 
-	PM.Model.prototype.save.call(this, path || PM.Comment.path, callback);
+	PM.Model.prototype.save.call(this, path || PM.Comment.path, (function(data) {
+		if (!data["err"]) {
+			this.constructor(data["comment"]);
+		}
+
+		callback(data);
+	}).bind(this));
+};
+
+/**
+ * @param {function} callback
+ */
+PM.Comment.prototype.delete = function(callback) {
+	PM.Model.prototype.delete.call(this, PM.Comment.path, callback);
 };
 
 PM.Comment.prototype.toJSON = function() {

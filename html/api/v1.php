@@ -1,6 +1,7 @@
 <?php
 	use PM\File\Attachment;
 	use PM\File\File;
+	use PM\Project\Comment;
 	use PM\Project\Project;
 	use PM\User\User;
 	use PM\Utility;
@@ -206,7 +207,6 @@
 
 		$router->map("POST", "/projects/[i:pid]/attachments/", function($pid) use ($_pdo, $_auth) {
 			$file_id = Utility::cleanInt($_POST["file_id"]);
-			$project_id = Utility::cleanInt($_POST["project_id"]);
 
 			$file = File::find($_pdo, $file_id);
 
@@ -214,7 +214,7 @@
 				return Utility::errorJson("Invalid file data provided.");
 			}
 
-			$project = Project::find($_pdo, $project_id);
+			$project = Project::find($_pdo, $pid);
 
 			if (is_null($project)) {
 				return Utility::errorJson("Invalid project data provided.");
@@ -222,18 +222,22 @@
 
 			$attachment = Attachment::create($_pdo, $file, $_auth->getUser(), $project);
 
+			if (!is_null($attachment)) {
+				$project->setLmod($_auth->getUser());
+			}
+
 			return [
 				"err" => !$attachment,
 				"msg" => !$attachment ? "There was an error creating your attachment." : "",
 				"attachment" => $attachment->toArray()
 			];
-		}); // !TODO:
+		});
 
 		$router->map("PUT", "/projects/[i:pid]/attachments/[i:id]/", function($pid, $id) use ($_pdo) {
 			return Utility::errorJson("Path not defined.");
 		}); // !TODO:
 
-		$router->map("DELETE", "/projects/[i:pid]/attachments/[i:id]/", function($pid, $id) use ($_pdo) {
+		$router->map("DELETE", "/projects/[i:pid]/attachments/[i:id]/", function($pid, $id) use ($_pdo, $_auth) {
 			$project = Project::find($_pdo, $pid);
 
 			if (is_null($project)) {
@@ -248,11 +252,107 @@
 
 			$attachment->remove(\PM\Config::getFileSystem());
 
+			$project->setLmod($_auth->getUser());
+
 			return [
 				"err" => false,
 				"msg" => ""
 			];
-		}); // !TODO:
+		});
+
+
+
+
+
+		$router->map("GET", "/projects/[i:pid]/comments/", function($pid) use ($_pdo, $_auth) {
+			$project = Project::find($_pdo, $pid);
+
+			$offset = Utility::cleanInt($_GET["offset"], 0, 0);
+
+			$comments = Comment::findAllForProject($_pdo, $project, $offset, SELECT_LIMIT + 1);
+
+			$has_more = count($comments) == SELECT_LIMIT + 1;
+
+			$comments = array_slice($comments, 0, SELECT_LIMIT);
+
+			return [
+				"err" => false,
+				"msg" => "",
+				"pagination" => [
+					"has_more" => $has_more,
+					"count" => count($comments),
+					"offset" => $offset
+				],
+				"comments" => array_map(function(Comment $file) {
+					return $file->toArray();
+				}, $comments)
+			];
+		});
+
+		$router->map("GET", "/projects/[i:pid]/comments/[i:id]/", function($pid, $id) use ($_pdo) {
+			$project = Project::find($_pdo, $pid);
+
+			if (is_null($project)) {
+				return Utility::errorJson("Invalid project data provided.");
+			}
+
+			$comment = Comment::findProject($_pdo, $project, $id);
+
+			return [
+				"err" => !$comment,
+				"msg" => !$comment ? "No comment found with given id" : "",
+				"comment" => $comment->toArray()
+			];
+		});
+
+		$router->map("POST", "/projects/[i:pid]/comments/", function($pid) use ($_pdo, $_auth) {
+			$text = Utility::cleanString($_POST["text"]);
+
+			$project = Project::find($_pdo, $pid);
+
+			if (is_null($project)) {
+				return Utility::errorJson("Invalid project data provided.");
+			}
+
+			$comment = Comment::create($_pdo, $project, $_auth->getUser(), $text);
+
+			if (!is_null($comment)) {
+				$project->setLmod($_auth->getUser());
+			}
+
+			return [
+				"err" => !$comment,
+				"msg" => !$comment ? "There was an error creating your comment." : "",
+				"comment" => $comment->toArray()
+			];
+		});
+
+		$router->map("PUT", "/projects/[i:pid]/comments/[i:id]/", function($pid, $id) use ($_pdo) {
+			return Utility::errorJson("Path not yet defined.");
+		}); // TODO:
+
+		$router->map("DELETE", "/projects/[i:pid]/comments/[i:id]/", function($pid, $id) use ($_pdo) {
+			return Utility::errorJson("Path not yet defined.");
+
+//			$project = Project::find($_pdo, $pid);
+//
+//			if (is_null($project)) {
+//				return Utility::errorJson("Invalid project data provided.");
+//			}
+//
+//			$comment = Comment::findProject($_pdo, $project, $id);
+//
+//			if (is_null($comment)) {
+//				return Utility::errorJson("Invalid comment data provided.");
+//			}
+//
+//			$comment->remove(\PM\Config::getFileSystem());
+//
+//			return [
+//				"err" => false,
+//				"msg" => ""
+//			];
+		});
 
 
 

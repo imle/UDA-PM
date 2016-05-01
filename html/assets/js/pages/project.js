@@ -2,6 +2,7 @@ Project = {
 	load: function() {
 		this.getStaticElements();
 		this.setEventListeners();
+		this.instanceFunctions();
 
 		this.bootstrapData();
 		this.printComments();
@@ -42,10 +43,35 @@ Project = {
 		this.elements.$removeProject.click(this.event_functions.deleteProject);
 		this.elements.$projectAddData.click(this.event_functions.addData);
 		this.elements.$projectAttachments.on("click", "[data-action='remove']", this.event_functions.removeAttachment);
+		this.modals.$addComment.on("click", "#add_comment_button", this.event_functions.saveComment);
+	},
+	instanceFunctions: function() {
+		PM.Comment.prototype.toTemplate = function() {
+			return Util.parse.template(Project.templates.comment, {
+				id: this.id,
+				user_id: this.creator_id,
+				name: PM.User.find(PM.data.users, this.creator_id).getFullName(),
+				created: Util.date.FjY(this.date_created) + " @ " + Util.date.gis(this.date_created),
+				created_relative: moment(this.date_created).fromNow(),
+				text: this.text
+			});
+		};
+
+		PM.Attachment.prototype.toTemplate = function() {
+			return Util.parse.template(Project.templates.file, {
+				id: this.id,
+				name: this.getFullName(),
+				size: this.sizeMin(1),
+				type: this.extension,
+				uploader: PM.User.find(PM.data.users, this.user_id).getFullName()
+			});
+		};
 	},
 	event_functions: {
 		imgError: function() {
-			$(this).attr("src", "//ssl.gstatic.com/accounts/ui/avatar_2x.png");
+			if (!$(this).data("err")) {
+				$(this).attr("src", "/assets/images/account/avatar.png").data("err", "true");
+			}
 		},
 		deleteProject: function() {
 			Project.data.project.delete(function(data) {
@@ -90,6 +116,29 @@ Project = {
 					$row.remove();
 				}
 			});
+		},
+		saveComment: function() {
+			var comment_text = Project.modals.$addComment.find("#comment").val();
+
+			var comment = new PM.Comment({
+				project_id: Project.data.project.id,
+				creator_id: session.user.id,
+				date_created: new Date(),
+				text: comment_text
+			});
+
+			comment.save(function(data) {
+				if (Util.clean.boolean(data["err"])) {
+					alert(data["msg"]);
+				}
+				else {
+					Project.data.comments.push(comment);
+
+					Project.printComment(comment);
+
+					Project.modals.$addComment.modal("toggle");
+				}
+			});
 		}
 	},
 	data: {
@@ -114,29 +163,32 @@ Project = {
 	printComments: function() {
 		if (this.data.comments.length) {
 			this.elements.$projectComments.html(this.data.comments.reduce(function(str, c) {
-				return str + Util.parse.template(Project.templates.comment, {
-						id: c.id,
-						user_id: c.creator_id,
-						name: PM.User.find(PM.data.users, c.creator_id).getFullName(),
-						created: Util.date.FjY(c.date_created) + " @ " + Util.date.gis(c.date_created),
-						created_relative: moment(c.date_created).fromNow(),
-						text: c.text
-					});
+				return str + c.toTemplate();
 			}, ""));
 
 			this.elements.$projectComments.find("img").on("error", this.event_functions.imgError);
 		}
 	},
+	/**
+	 * @param {PM.Comment} comment
+	 */
+	printComment: function(comment) {
+		var $comment = $(comment.toTemplate());
+
+		$comment.prependTo(Project.elements.$projectComments);
+
+		$comment.find("img").on("error", Project.event_functions.imgError);
+	},
 	printAttachments: function() {
 		this.elements.$projectAttachments.html(this.data.attachments.reduce(function(str, a) {
-			return str + Util.parse.template(Project.templates.file, {
-				id: a.id,
-				name: a.getFullName(),
-				size: a.sizeMin(1),
-				type: a.extension,
-				uploader: PM.User.find(PM.data.users, a.user_id).getFullName()
-			});
+			return str + a.toTemplate();
 		}, ""));
+	},
+	/**
+	 * @param {PM.Attachment} attachment
+	 */
+	printAttachment: function(attachment) {
+		Project.elements.$projectAttachments.append(attachment.toTemplate());
 	},
 	createNewAttachment: function(file) {
 		var attachment = new PM.Attachment({
@@ -159,13 +211,7 @@ Project = {
 			else {
 				Project.data.attachments.push(attachment);
 
-				Project.elements.$projectAttachments.append(Util.parse.template(Project.templates.file, {
-					id: attachment.id,
-					name: attachment.getFullName(),
-					size: attachment.sizeMin(1),
-					type: attachment.extension,
-					uploader: PM.User.find(PM.data.users, attachment.user_id).getFullName()
-				}));
+				Project.printAttachment(attachment);
 			}
 		});
 	},

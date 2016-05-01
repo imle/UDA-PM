@@ -75,18 +75,18 @@
 			line-height: 40px;
 
 			&:before {
-				content: "\f016";;
+				content: "\f016";   // empty
 			}
 
 			&[data-type="pdf"]:before {
-				content: "\f1c1";
+				content: "\f1c1";   // pdf
 			}
 
 			&[data-type="numbers"]:before,
 			&[data-type="pages"]:before,
 			&[data-type="keynote"]:before,
 			&[data-type="txt"]:before {
-				content: "\f0f6";
+				content: "\f0f6";   // text
 			}
 
 			&[data-type="docx"]:before,
@@ -95,7 +95,7 @@
 			&[data-type="dotm"]:before,
 			&[data-type="docb"]:before,
 			&[data-type="doc"]:before {
-				content: "\f1c2";
+				content: "\f1c2";   // word
 			}
 
 			&[data-type="xml"]:before,
@@ -105,14 +105,14 @@
 			&[data-type="xltx"]:before,
 			&[data-type="xlsx"]:before,
 			&[data-type="xls"]:before {
-				content: "\f1c3";
+				content: "\f1c3";   // excel
 			}
 
 			&[data-type="ppt"]:before,
 			&[data-type="ppsx"]:before,
 			&[data-type="pptm"]:before,
 			&[data-type="pptx"]:before {
-				content: "\f1c4";
+				content: "\f1c4";   // power point
 			}
 
 			&[data-type="jpg"]:before,
@@ -121,7 +121,7 @@
 			&[data-type="tiff"]:before,
 			&[data-type="psd"]:before,
 			&[data-type="png"]:before {
-				content: "\f1c5";
+				content: "\f1c5";   // image
 			}
 
 			&[data-type="zip"]:before,
@@ -130,7 +130,7 @@
 			&[data-type="tar"]:before,
 			&[data-type="ace"]:before,
 			&[data-type="zipx"]:before {
-				content: "\f1c6";
+				content: "\f1c6";   // archive
 			}
 
 			&[data-type="mp3"]:before,
@@ -139,7 +139,7 @@
 			&[data-type="mid"]:before,
 			&[data-type="ogg"]:before,
 			&[data-type="flac"]:before {
-				content: "\f1c7";
+				content: "\f1c7";   // audio
 			}
 
 			&[data-type="avi"]:before,
@@ -151,7 +151,7 @@
 			&[data-type="mpeg"]:before,
 			&[data-type="wmv"]:before,
 			&[data-type="mp4"]:before {
-				content: "\f1c8";
+				content: "\f1c8";   // video
 			}
 
 			&[data-type="php"]:before,
@@ -163,8 +163,10 @@
 			&[data-type="html"]:before,
 			&[data-type="js"]:before,
 			&[data-type="scss"]:before,
-			&[data-type="css"]:before {
-				content: "\f1c9";
+			&[data-type="less"]:before,
+			&[data-type="css"]:before,
+			&[data-type="sass"]:before {
+				content: "\f1c9";   // code
 			}
 		}
 	}

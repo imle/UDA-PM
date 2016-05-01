@@ -104,6 +104,9 @@ header #logo {
 input[type=checkbox] {
   cursor: pointer; }
 
+textarea {
+  max-width: 100%; }
+
 /** ----- Cards ---------------------------------------------------------------------------------------------------- **/
 .card {
   background-color: #F7F7F7;
@@ -511,7 +514,7 @@ input[type=checkbox] {
         content: "\f1c7"; }
       .attachment_thread .attachment .icon[data-type="avi"]:before, .attachment_thread .attachment .icon[data-type="asf"]:before, .attachment_thread .attachment .icon[data-type="mov"]:before, .attachment_thread .attachment .icon[data-type="qt"]:before, .attachment_thread .attachment .icon[data-type="flv"]:before, .attachment_thread .attachment .icon[data-type="mpg"]:before, .attachment_thread .attachment .icon[data-type="mpeg"]:before, .attachment_thread .attachment .icon[data-type="wmv"]:before, .attachment_thread .attachment .icon[data-type="mp4"]:before {
         content: "\f1c8"; }
-      .attachment_thread .attachment .icon[data-type="php"]:before, .attachment_thread .attachment .icon[data-type="sql"]:before, .attachment_thread .attachment .icon[data-type="aspx"]:before, .attachment_thread .attachment .icon[data-type="vb"]:before, .attachment_thread .attachment .icon[data-type="ashx"]:before, .attachment_thread .attachment .icon[data-type="cs"]:before, .attachment_thread .attachment .icon[data-type="html"]:before, .attachment_thread .attachment .icon[data-type="js"]:before, .attachment_thread .attachment .icon[data-type="scss"]:before, .attachment_thread .attachment .icon[data-type="css"]:before {
+      .attachment_thread .attachment .icon[data-type="php"]:before, .attachment_thread .attachment .icon[data-type="sql"]:before, .attachment_thread .attachment .icon[data-type="aspx"]:before, .attachment_thread .attachment .icon[data-type="vb"]:before, .attachment_thread .attachment .icon[data-type="ashx"]:before, .attachment_thread .attachment .icon[data-type="cs"]:before, .attachment_thread .attachment .icon[data-type="html"]:before, .attachment_thread .attachment .icon[data-type="js"]:before, .attachment_thread .attachment .icon[data-type="scss"]:before, .attachment_thread .attachment .icon[data-type="less"]:before, .attachment_thread .attachment .icon[data-type="css"]:before, .attachment_thread .attachment .icon[data-type="sass"]:before {
         content: "\f1c9"; }
 
 /** ----- Project -------------------------------------------------------------------------------------------------- **/
