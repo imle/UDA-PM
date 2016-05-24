@@ -50,6 +50,10 @@
 		/* Static Find Functions */
 
 		public static function find(Base $_pdo, int $id) {
+			if ($id <= 0) {
+				return null;
+			}
+
 			$row = $_pdo->fetchOne("SELECT * FROM token WHERE id = :id", [
 				"id" => $id
 			]);
@@ -58,6 +62,10 @@
 		}
 
 		public static function findByValue(Base $_pdo, string $value) {
+			if ($value == "") {
+				return null;
+			}
+
 			$row = $_pdo->fetchOne("SELECT * FROM token WHERE `value` = :v", [
 				"v" => $value
 			]);

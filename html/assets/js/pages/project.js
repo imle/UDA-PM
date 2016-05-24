@@ -177,6 +177,8 @@ Project = {
 
 		$comment.prependTo(Project.elements.$projectComments);
 
+		Project.elements.$projectComments.removeClass("empty");
+
 		$comment.find("img").on("error", Project.event_functions.imgError);
 	},
 	printAttachments: function() {

@@ -168,6 +168,20 @@
 			return true;
 		}
 
+		/**
+		 * @param FilesystemInterface $_fs
+		 * @return resource
+		 */
+		public function getGDHandle(FilesystemInterface $_fs) {
+			if (!$this->isImage())
+				return null;
+
+			$size = $_fs->getSize($this->getPath());
+			$handle = $_fs->readStream($this->getPath());
+
+			return imagecreatefromstring(fread($handle, $size));
+		}
+
 		/* Static Find Functions */
 
 		/**
@@ -176,6 +190,10 @@
 		 * @return self
 		 */
 		public static function find(Base $_pdo, int $id) {
+			if ($id <= 0) {
+				return null;
+			}
+
 			$query = "SELECT * FROM `file` WHERE id = :id";
 
 			$row = $_pdo->fetchOne($query, [

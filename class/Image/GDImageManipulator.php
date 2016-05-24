@@ -1,6 +1,7 @@
 <?php
 	namespace PM\Image;
 
+	use League\Flysystem\FilesystemInterface;
 	use PM\File\File;
 	use WideImage\Image;
 	use WideImage\WideImage;
@@ -10,15 +11,15 @@
 		private $_wi;
 
 		/**
-		 * @param File|resource|string $file_in
+		 * @param File $file_in
+		 * @param FilesystemInterface $_fs
 		 * @return ImageManipulatorInterface
 		 */
-		public static function read($file_in) {
+		public static function read(File $file_in, FilesystemInterface $_fs) {
 			$self = new self();
 
-			if (is_object($file_in) && $file_in instanceof File)
-				$file_in = $file_in->getGDHandle();
-
+			$file_in = $file_in->getGDHandle($_fs);
+			
 			$self->_wi = WideImage::load($file_in);
 			return $self;
 		}

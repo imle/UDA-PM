@@ -1,7 +1,6 @@
 <?php
 	namespace PM\User;
 
-	use League\Flysystem\FilesystemInterface;
 	use PM\File\File;
 	use PM\PDO\Base;
 	use PM\Token\AccountVerifyToken;
@@ -95,7 +94,7 @@
 		 */
 		public function getTokenAccountVerify() {
 			if (is_null($this->_token_account_verify))
-				$this->_token_account_verify = AccountVerifyToken::findByValue($this->_pdo, $this->token_account_verify);
+				$this->_token_account_verify = AccountVerifyToken::findByValue($this->_pdo, $this->token_account_verify ?? "");
 
 			return $this->_token_account_verify;
 		}
@@ -105,7 +104,7 @@
 		 */
 		public function getTokenPasswordReset() {
 			if (is_null($this->_token_password_reset))
-				$this->_token_password_reset = PasswordResetToken::findByValue($this->_pdo, $this->token_password_reset);
+				$this->_token_password_reset = PasswordResetToken::findByValue($this->_pdo, $this->token_password_reset ?? "");
 
 			return $this->_token_password_reset;
 		}
@@ -115,7 +114,7 @@
 		 */
 		public function getProfileImage() {
 			if (is_null($this->_image_file))
-				$this->_image_file = File::find($this->_pdo, $this->image_file_id);
+				$this->_image_file = File::find($this->_pdo, $this->image_file_id ?? 0);
 
 			return $this->_image_file;
 		}

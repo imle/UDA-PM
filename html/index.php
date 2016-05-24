@@ -31,6 +31,15 @@
 
 
 	
+	$router->map("GET", "/account/", function() use ($_pdo, $_auth) {
+		$_auth->validate();
+
+		require __DIR__ . "/../view/account.php";
+	}, "Account");
+
+
+
+
 	$router->map("GET", "/projects/", function() use ($_pdo, $_auth) {
 		$_auth->validate();
 
@@ -138,7 +147,7 @@
 
 		require __DIR__ . "/../view/part/top.php";
 
-		echo "404 Not Found";
+		require __DIR__ . "/../view/code/404.php";
 
 		require __DIR__ . "/../view/part/bottom.php";
 	}

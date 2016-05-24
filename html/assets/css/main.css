@@ -135,6 +135,23 @@ textarea {
     padding: 4px;
     cursor: pointer; }
 
+/** ----- Tab Set -------------------------------------------------------------------------------------------------- **/
+.body-tab-set {
+  padding-left: 0;
+  padding-right: 0;
+  background-color: #f4f4f4;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -o-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
+  .body-tab-set .tab-set {
+    padding: 10px 60px 10px 15px;
+    background-color: #ffffff; }
+    .body-tab-set .tab-set .nav-sm li a {
+      padding: 5px 15px;
+      margin-right: 4px;
+      cursor: pointer; }
+
 /** ----- Login ---------------------------------------------------------------------------------------------------- **/
 #login-form {
   -webkit-animation: fade-in-up 1 .5s;
@@ -405,7 +422,7 @@ textarea {
 #items_list td:nth-child(5) {
   width: 200px; }
 #items_list td:nth-child(6) {
-  width: 120px; }
+  width: 130px; }
 
 /** ----- Comments ------------------------------------------------------------------------------------------------- **/
 .comment_thread {
@@ -427,9 +444,12 @@ textarea {
       margin-right: 20px; }
       .comment_thread .comment .comment_body p {
         margin-right: 20px; }
-  .comment_thread.empty .message {
+  .comment_thread .e_message {
+    display: none;
     padding-top: 15px;
     padding-left: 10px; }
+  .comment_thread.empty .e_message {
+    display: block; }
   .comment_thread:after {
     position: absolute;
     bottom: 0;
@@ -518,32 +538,17 @@ textarea {
         content: "\f1c9"; }
 
 /** ----- Project -------------------------------------------------------------------------------------------------- **/
-#project_data {
-  padding-left: 0;
-  padding-right: 0;
-  background-color: #f4f4f4;
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  -o-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
-  #project_data #project_data_nav {
-    padding: 10px 60px 10px 15px;
-    background-color: #ffffff; }
-    #project_data #project_data_nav .nav-sm li a {
-      padding: 5px 15px;
-      margin-right: 4px;
-      cursor: pointer; }
-  #project_data #project_add_data {
-    line-height: 20px;
-    font-size: 16px;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    text-align: center;
-    border-radius: 50%;
-    cursor: pointer; }
+#project_data #project_add_data {
+  line-height: 20px;
+  font-size: 16px;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer; }
 
 /** ----- Modals --------------------------------------------------------------------------------------------------- **/
 .modal-title .fa {

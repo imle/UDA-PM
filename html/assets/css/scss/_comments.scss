@@ -27,11 +27,15 @@
 			}
 		}
 	}
+	.e_message {
+		display: none;
+		padding-top: 15px;
+		padding-left: 10px;
+	}
 
 	&.empty {
-		.message {
-			padding-top: 15px;
-			padding-left: 10px;
+		.e_message {
+			display: block;
 		}
 	}
 

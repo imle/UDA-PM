@@ -15,19 +15,23 @@
 	$router->map("GET", "/profile/[small|medium|large:size]/[i:id]/", function($size, $id) use ($_pdo, $_fs, $_auth) {
 		$user = \PM\User\User::find($_pdo, $id);
 
-		if (is_null($user))
+		if (is_null($user)) {
+			header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
 			return;
+		}
 
-		$img = $user->getProfileImage($_fs);
+		$img = $user->getProfileImage();
+
+		if (is_null($img) || !$img->isImage()) {
+			header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+			return;
+		}
 
 		$file_name = strtolower($user->getNameFirst() . "-" . $user->getNameLast() . "." . $img->getExtension());
 
 		header("Content-Disposition: inline; filename=\"" . $file_name . "\"");
 
-		if (is_null($img) || !$img->isImage())
-			return;
-
-		$_im = \PM\Image\GDImageManipulator::read($img);
+		$_im = \PM\Image\GDImageManipulator::read($img, $_fs);
 
 		if ($size == "medium") {
 			$_im->resize("50%", "50%");

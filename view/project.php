@@ -22,8 +22,8 @@
 		<div id="" class="col-lg-6">
 		</div>
 
-		<div id="project_data" class="col-lg-6">
-			<div id="project_data_nav">
+		<div id="project_data" class="col-lg-6 body-tab-set">
+			<div id="project_data_nav" class="tab-set">
 				<ul class="nav nav-pills nav-sm">
 					<li role="presentation" class="active">
 						<a data-target="#project_comments" role="tab" data-toggle="tab">Comments</a>
@@ -40,7 +40,7 @@
 
 			<div class="tab-content">
 				<div id="project_comments" role="tabpanel" class="tab-pane active empty comment_thread">
-					<div class="message">No comments yet.</div>
+					<div class="e_message">No comments yet.</div>
 				</div>
 				<div id="project_attachments" role="tabpanel" class="tab-pane attachment_thread"></div>
 			</div>
@@ -132,7 +132,7 @@
 <script type="text/html" id="template_comment">
 <div class="comment" data-id="<%= id %>">
 	<a class="avatar pull-left thumb-sm m-l-n-md">
-		<img src="/image/profile/small/<%= id %>/" class="img-circle" alt="">
+		<img src="/image/profile/small/<%= user_id %>/" class="img-circle" alt="">
 	</a>
 	<div class="comment_body">
 		<div class="m-b-xs">

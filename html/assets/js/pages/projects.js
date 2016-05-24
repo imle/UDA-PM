@@ -2,6 +2,7 @@ Projects = {
 	load: function() {
 		this.getStaticElements();
 		this.setEventListeners();
+		this.instanceFunctions();
 
 		this.bootstrapData();
 		this.printProjects();
@@ -37,6 +38,22 @@ Projects = {
 		this.elements.$filterSelect.on("change", this.event_functions.filterChange);
 		this.elements.$newButton.on("click", this.event_functions.newProject);
 		this.elements.$createButton.on("click", this.event_functions.createProject);
+	},
+	instanceFunctions: function() {
+		/**
+		 * @param {Array.<PM.User>} users
+		 * @returns {*}
+		 */
+		PM.Project.prototype.toTemplate = function(users) {
+			return Util.parse.template(Projects.templates.table_row, {
+				id: this.id,
+				name: this.name,
+				relation: this.getUserRelation(session.user),
+				lead: PM.User.find(users, this.project_lead_id).getFullName(),
+				status: this.getStatusText(),
+				date_lmod: moment(this.date_lmod).fromNow()
+			})
+		};
 	},
 	event_functions: {
 		rowClick: function() {
@@ -208,28 +225,14 @@ Projects = {
 		var projects = Projects.data.projects.sort(PM.Project.compare.desc.date);
 		
 		this.elements.$projectsListBody.html(projects.reduce(function(str, p) {
-			return str + Util.parse.template(Projects.templates.table_row, {
-				id: p.id,
-				name: p.name,
-				relation: p.getUserRelation(session.user),
-				lead: PM.User.find(PM.data.users, p.project_lead_id).getFullName(),
-				status: p.getStatusText(),
-				date_lmod: Util.date.mdY(p.date_lmod)
-			});
+			return str + p.toTemplate(PM.data.users);
 		}, ""));
 	},
 	/**
 	 * @param {PM.Project} project
 	 */
 	printProject: function(project) {
-		this.elements.$projectsListBody.prepend(Util.parse.template(Projects.templates.table_row, {
-			id: project.id,
-			name: project.name,
-			relation: project.getUserRelation(session.user),
-			lead: PM.User.find(PM.data.users, project.project_lead_id).getFullName(),
-			status: project.getStatusText(),
-			date_lmod: Util.date.mdY(project.date_lmod)
-		}));
+		this.elements.$projectsListBody.prepend(project.toTemplate(PM.data.users));
 	}
 };
 

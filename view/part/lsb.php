@@ -11,10 +11,10 @@
 		<i class="fa fa-briefcase"></i>
 		<span>Projects</span>
 	</a>
-	<a class="option" href="/files/">
-		<i class="fa fa-file"></i>
-		<span>Files</span>
-	</a>
+<!--	<a class="option" href="/files/">-->
+<!--		<i class="fa fa-file"></i>-->
+<!--		<span>Files</span>-->
+<!--	</a>-->
 	<a class="option" href="/users/">
 		<i class="fa fa-users"></i>
 		<span>Users</span>

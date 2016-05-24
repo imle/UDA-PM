@@ -292,34 +292,6 @@
 
 		/**
 		 * @param Base $_pdo
-		 * @param File $_file
-		 * @param int $offset
-		 * @param int $limit
-		 * @return static[]
-		 */
-		public static function findAllReferencingFile(Base $_pdo, File $_file, int $offset = 0, int $limit = 30) : array {
-			$query = "SELECT p.*, GROUP_CONCAT(r2.user_id) AS assigned_ids FROM Project p
-                      LEFT JOIN rel_user_project r ON p.id = r.project_id
-                      LEFT JOIN rel_user_project r2 ON p.id = r2.project_id
-                      LEFT JOIN rel_file_project rf ON p.id = rf.project_id
-                      WHERE rf.file_id = :f AND p.is_deleted = FALSE
-                      GROUP BY p.id";
-
-			if ($limit > 0) {
-				$query .= " LIMIT :o, :l";
-			}
-
-			return $_pdo->fetchAll($query, [
-				"o" => $offset,
-				"l" => $limit,
-				"f" => $_file->getId()
-			], function($row) use ($_pdo) {
-				return self::getInstance($_pdo, $row);
-			});
-		}
-
-		/**
-		 * @param Base $_pdo
 		 * @param int $offset
 		 * @param int $limit
 		 * @param string $search

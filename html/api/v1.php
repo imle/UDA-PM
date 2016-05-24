@@ -51,7 +51,7 @@
 			return [
 				"err" => !$project,
 				"msg" => !$project ? "No project found with given id" : "",
-				"project" => $project->toArray()
+				"project" => $project ? $project->toArray() : null
 			];
 		});
 
@@ -111,7 +111,7 @@
 			return [
 				"err" => !$project,
 				"msg" => !$project ? "No project found with given id" : "",
-				"project" => $project->toArray(),
+				"project" => $project ? $project->toArray() : null
 			];
 		});
 
@@ -121,6 +121,10 @@
 
 		$router->map("DELETE", "/projects/[i:id]/", function($id) use ($_pdo, $_auth) {
 			$project = Project::find($_pdo, $id);
+
+			if (is_null($project)) {
+				return Utility::errorJson("Invalid project data provided.");
+			}
 
 			if ($_auth->getUser()->getType() != User::TYPE_SUPERVISOR) {
 				if ($project->getUserCreatedId() != $_auth->getUser()->getId()) {
@@ -146,14 +150,14 @@
 
 			$project = Project::find($_pdo, $id);
 
-			if (!$project) {
-				return Utility::errorJson("No project found with given id");
+			if (is_null($project)) {
+				return Utility::errorJson("Invalid project data provided.");
 			}
 
 			return [
 				"err" => false,
 				"msg" => "",
-				"lead" => $project->getProjectLead()->toArray(),
+				"lead" => $project->getProjectLead() ? $project->getProjectLead()->toArray() : null,
 				"users" => array_map(function(User $user) {
 					return $user->toArray();
 				}, $project->getAllUsersAssigned($type))
@@ -166,6 +170,10 @@
 
 		$router->map("GET", "/projects/[i:pid]/attachments/", function($pid) use ($_pdo, $_auth) {
 			$project = Project::find($_pdo, $pid);
+
+			if (is_null($project)) {
+				return Utility::errorJson("Invalid project data provided.");
+			}
 
 			$offset = Utility::cleanInt($_GET["offset"], 0, 0);
 
@@ -201,7 +209,7 @@
 			return [
 				"err" => !$attachment,
 				"msg" => !$attachment ? "No attachment found with given id" : "",
-				"attachment" => $attachment->toArray()
+				"attachment" => $attachment ? $attachment->toArray() : null
 			];
 		});
 
@@ -229,7 +237,7 @@
 			return [
 				"err" => !$attachment,
 				"msg" => !$attachment ? "There was an error creating your attachment." : "",
-				"attachment" => $attachment->toArray()
+				"attachment" => $attachment ? $attachment->toArray() : null
 			];
 		});
 
@@ -267,6 +275,10 @@
 		$router->map("GET", "/projects/[i:pid]/comments/", function($pid) use ($_pdo, $_auth) {
 			$project = Project::find($_pdo, $pid);
 
+			if (is_null($project)) {
+				return Utility::errorJson("Invalid project data provided.");
+			}
+
 			$offset = Utility::cleanInt($_GET["offset"], 0, 0);
 
 			$comments = Comment::findAllForProject($_pdo, $project, $offset, SELECT_LIMIT + 1);
@@ -301,7 +313,7 @@
 			return [
 				"err" => !$comment,
 				"msg" => !$comment ? "No comment found with given id" : "",
-				"comment" => $comment->toArray()
+				"comment" => $comment ? $comment->toArray() : null
 			];
 		});
 
@@ -323,7 +335,7 @@
 			return [
 				"err" => !$comment,
 				"msg" => !$comment ? "There was an error creating your comment." : "",
-				"comment" => $comment->toArray()
+				"comment" => $comment ? $comment->toArray() : null
 			];
 		});
 
@@ -388,7 +400,7 @@
 			return [
 				"err" => !$user,
 				"msg" => !$user ? "No user found with given id" : "",
-				"user" => $user->toArray()
+				"user" => $user ? $user->toArray() : null
 			];
 		});
 
